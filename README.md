@@ -634,7 +634,7 @@ In regards to billing when hosting function apps in the Consumption plan, you ar
     }
 }
 ```
-## <name="p6">6. Робота з локальним проектом функцій</a>
+## <a name="p6">6. Робота з локальним проектом функцій</a>
 
 ### <a name="p6.1.">6.1. Створити шаблон функцій</a>
 
