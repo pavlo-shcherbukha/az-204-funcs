@@ -1,0 +1,39 @@
+{
+	"report": {
+		"header": {
+			"brnachid`": "XZXZ-XZXZ-XZXZ-XZXZ-XZXZ-XZXZ",
+			"brnachanme": "2024-07-30T12:05:49.440Z",
+			"timestamp": "OK"
+		},
+		"data": {
+			"transactions": [
+				{
+					"transactinId": "1234567890",
+					"amount": 100.50,
+					"currency": "UAH",
+					"timestamp": "2024-07-30T12:05:49.440Z",
+					"staus": "OK",
+					"trantype": "credit"
+				},
+				{
+					"transactinId": "1234567891",
+					"amount": 101.90,
+					"currency": "UAH",
+					"timestamp": "2024-07-30T14:05:49.440Z",
+					"staus": "OK",
+					"trantype": "credit"
+				},
+				{
+					"transactinId": "1234567892",
+					"amount": 131.12,
+					"currency": "UAH",
+					"timestamp": "2024-07-30T16:05:49.440Z",
+					"staus": "OK",
+					"trantype": "credit"
+				}
+
+			]
+		}
+
+	}
+}

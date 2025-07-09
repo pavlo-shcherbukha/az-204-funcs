@@ -1,0 +1,52 @@
+# Test cases for the createPAyment endpoint
+###
+POST http://localhost:7071/api/createPayment
+Content-Type: application/json
+Accept: application/json
+
+{
+    "pnum": "23",
+    "pdate": "2025-06-01",
+    "value_date": "2025-06-05",
+    "dacc": "222100001",
+    "kacc": "333300002",
+    "amount": 1001.23,
+    "currency": "EUR",
+    "payment_type": "TRNSFER",
+    "description": "Test payment"
+}
+
+###
+
+POST http://localhost:7071/api/createPayment
+Content-Type: application/json
+Accept: application/json
+
+{
+    "pnum": "23",
+    "pdate": "2025-06-01",
+    "value_date": "2025-06-05",
+    "dacc": "222100001",
+    "kacc": "333300002",
+    "amount": 10.23,
+    "currency": "EUR",
+    "payment_type": "TRNSFER",
+    "description": "Test payment"
+}
+
+###
+POST http://localhost:7071/api/createPayment
+Content-Type: application/json
+Accept: application/json
+
+{
+    "pnum": "23",
+    "pdate": "2025-06-01",
+    "value_date": "2025-06-05",
+    "dacc": "222100001",
+    "kacc": "333300002",
+    "amount": 10.23,
+    "currency": "USD",
+    "payment_type": "TRNSFER",
+    "description": "Test payment"
+}

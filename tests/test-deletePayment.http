@@ -1,0 +1,10 @@
+# Test cases for the deletePayment endpoint
+### OK Request
+DELETE http://localhost:7071/api/deletePayment?transactionId=12345
+Accept: application/json
+
+### Error Request
+DELETE http://localhost:7071/api/deletePayment
+Accept: application/json
+
+

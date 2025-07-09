@@ -1,0 +1,17 @@
+# Test cases for the createPAyment endpoint
+###
+POST http://localhost:7071/api/uploadReport
+Content-Type: multipart/form-data; boundary=boundary123
+Accept: application/json
+
+--boundary123
+Content-Disposition: form-data; name="reportDate"
+
+2025-07-01
+--boundary123
+Content-Disposition: form-data; name="reportFile"; filename="test.txt"
+Content-Type: text/plain
+
+This is the content of the test file.
+--boundary123--
+

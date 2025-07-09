@@ -1,0 +1,10 @@
+# Test cases for the liatPayments endpoint
+### OK Request
+GET http://localhost:7071/api/listPayments?pdate=2025-06-01
+Accept: application/json
+
+### Error Request
+GET http://localhost:7071/api/listPayments
+Accept: application/json
+
+
