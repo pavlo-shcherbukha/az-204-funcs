@@ -712,11 +712,108 @@ func azure functionapp publish az-app01
 --overwrite-settings — перезаписує налаштування в Azure
 --no-build — не виконує збірку перед публікацією
 --force — ігнорує попередження
---remote-build - віддалена   побдова пакеті
+--build remote - віддалена   побдова пакетів (викачування залежностей)
 ```
 
 **Документація:**
 [Azure Functions Core Tools: func azure functionapp publish](https://learn.microsoft.com/en-us/azure/azure-functions/functions-core-tools-reference?tabs=v2#func-azure-functionapp-publish)
+
+
+**Після кількох дослідів можна зробити такі висновки:**  
+- якщо вибираємо  план flex consumption -  то платформа для python  або Node.js тільки Linux. В цьому випадку навіть немає можливості вибору
+- якщо вибираємо план consumption -  то можна вибрати Linux (lgacy) або windows
+- Деплоймнет командою func azure functionapp publish <appname>  без додаткових опцій завжди потребує локально наявності каталога node-modules (Для Node.js)
+І маємо ось такий лог. В якому видно, що deployment  успішний, але фукнцій немає
+```text
+func azure functionapp publish signapp --javascript
+Getting site publishing info...
+[2025-07-28T13:08:18.831Z] Starting the function app deployment...
+[2025-07-28T13:08:18.838Z] Creating archive for current directory...
+Uploading 17,97 MB [##############################################################################]
+Deployment in progress, please wait...
+Starting deployment pipeline.
+[Kudu-SourcePackageUriDownloadStep] Skipping download. Zip package is present at /tmp/zipdeploy/cfec8035-487f-4615-bc27-d46c120a8598.zip
+[Kudu-ValidationStep] starting.
+[Kudu-ValidationStep] completed.
+[Kudu-ExtractZipStep] starting.
+[Kudu-ExtractZipStep] completed.
+[Kudu-ContentValidationStep] starting.
+[Kudu-ContentValidationStep] completed.
+[Kudu-PreBuildValidationStep] Skipping pre-build validation (remotebuild = false).
+[Kudu-OryxBuildStep] Skipping oryx build (remotebuild = false).
+[Kudu-PostBuildValidationStep] starting.
+[Kudu-PostBuildValidationStep] completed.
+[Kudu-PackageZipStep] starting.
+[Kudu-PackageZipStep] completed.
+[Kudu-UploadPackageStep] starting.
+[Kudu-UploadPackageStep] completed. Uploaded package to storage successfully.
+[Kudu-RemoveWorkersStep] starting.
+[Kudu-RemoveWorkersStep] completed.
+[Kudu-SyncTriggerStep] starting.
+[Kudu-CleanUpStep] starting.
+[Kudu-CleanUpStep] completed.
+Finished deployment pipeline.
+[Kudu-SyncTriggerStep] completed.
+Checking the app health...Host status endpoint: https://signapp-aaaaaaa.central-01.azurewebsites.net/admin/host/status
+. done
+Host status: {"id":"3c8caf2420c0cf94a7e7c0f70f60d57b","state":"Running","version":"4.1040.300.0","versionDetails":"4.1040.300-dev.0.0+ade5fa023e0d9c727872871669fd9454a67ec69d","platformVersion":"","instanceId":"29271521-a5bb-482f-8a4c-d6fc27688412","computerName":"","processUptime":28312353,"functionAppContentEditingState":"NotAllowed","extensionBundle":{"id":"Microsoft.Azure.Functions.ExtensionBundle","version":"4.24.2"}}
+[2025-07-28T13:10:29.133Z] The deployment was successful!
+Functions in signapp:
+```
+- ДЕплоймент командою func azure functionapp publish <appname> без додаткових модулів відбувається успішно тільки отакою командоб:
+
+'''bash
+func azure functionapp publish <appname> --build remote --javascript
+'''
+Ось отриманий лог:
+
+```text
+func azure functionapp publish signapp --build remote --javascript
+Getting site publishing info...
+[2025-07-28T12:54:48.025Z] Starting the function app deployment...
+[2025-07-28T12:54:48.032Z] Creating archive for current directory...
+Performing remote build for functions project.
+Uploading 17,97 MB [##############################################################################]
+Deployment in progress, please wait...
+Starting deployment pipeline.
+[Kudu-SourcePackageUriDownloadStep] Skipping download. Zip package is present at /tmp/zipdeploy/3eb79cde-e164-4fee-b5f7-2df872ff0e2c.zip
+[Kudu-ValidationStep] starting.
+[Kudu-ValidationStep] completed.
+[Kudu-ExtractZipStep] starting.
+[Kudu-ExtractZipStep] completed.
+[Kudu-ContentValidationStep] starting.
+[Kudu-ContentValidationStep] completed.
+[Kudu-PreBuildValidationStep] starting.
+[Kudu-PreBuildValidationStep] completed.
+[Kudu-OryxBuildStep] starting.
+[Kudu-OryxBuildStep] completed.
+[Kudu-PostBuildValidationStep] starting.
+[Kudu-PostBuildValidationStep] completed.
+[Kudu-PackageZipStep] starting.
+[Kudu-PackageZipStep] completed.
+[Kudu-UploadPackageStep] starting.
+[Kudu-UploadPackageStep] completed. Uploaded package to storage successfully.
+[Kudu-RemoveWorkersStep] starting.
+[Kudu-RemoveWorkersStep] completed.
+[Kudu-SyncTriggerStep] starting.
+[Kudu-CleanUpStep] starting.
+[Kudu-CleanUpStep] completed.
+Finished deployment pipeline.
+Checking the app health...Host status endpoint: https://signapp-aaaaaaaa.central-01.azurewebsites.net/admin/host/status
+. done
+Host status: {"id":"3c8caf2420c0cf94a7e7c0f70f60d57b","state":"Running","version":"4.1040.300.0","versionDetails":"4.1040.300-dev.0.0+ade5fa023e0d9c727872871669fd9454a67ec69d","platformVersion":"","instanceId":"33589783-7d5e-41ec-91ca-19cbc01f8c2b","computerName":"","processUptime":13210109,"functionAppContentEditingState":"NotAllowed","extensionBundle":{"id":"Microsoft.Azure.Functions.ExtensionBundle","version":"4.24.2"}}
+[2025-07-28T12:58:48.955Z] The deployment was successful!
+Functions in signapp:
+    downloadBlob - [httpTrigger]
+        Invoke url: https://signapp-aaaaa.central-01.azurewebsites.net/api/downloadblob
+
+    ListBlobs - [httpTrigger]
+        Invoke url: https://signapp-aaaa.central-01.azurewebsites.net/api/listblobs
+
+    uploadBlob - [httpTrigger]
+        Invoke url: https://signapp-aaaa.central-01.azurewebsites.net/api/uploadblob
+
+```
 
 
 **Другий спосіб полягає в передачі  в хмару наперед підготованого zip - архіву**.
